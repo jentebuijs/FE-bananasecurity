@@ -1,10 +1,24 @@
 import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
+import axios from 'axios';
 
 function SignUp() {
+    const history = useHistory();
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ username, setUsername ] = useState('');
+
+    async function signMeUp(email, password) {
+        try {
+            const response = axios.post('http://localhost:3000/register', {
+                email: email,
+                password: password
+            });
+            { response && history.push('/signin') }
+        } catch(e) {
+            console.error(e);
+        }
+    }
 
   return (
     <>
@@ -12,7 +26,7 @@ function SignUp() {
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur atque consectetur, dolore eaque eligendi
         harum, numquam, placeat quisquam repellat rerum suscipit ullam vitae. A ab ad assumenda, consequuntur deserunt
         doloremque ea eveniet facere fuga illum in numquam quia reiciendis rem sequi tenetur veniam?</p>
-      <form onSubmit={() => console.log(email, password, username)}>
+      <form onSubmit={() => signMeUp(email, password)}>
           <label htmlFor="email">Emailadres:</label>
           <input
               type="text" id="email" name="email"
